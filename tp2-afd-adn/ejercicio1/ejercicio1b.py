@@ -9,12 +9,10 @@ class Automata:
 
         correct = False
         index = 0
-        accept_states = [3, 2]
+        accept_states = [1, 2]
 
         for c in self.string:
             try:
-                if estados[index][c] not in accept_states:
-                    correct = False
                 index = estados[index][c]
             except KeyError:
                 """Aca solo entra si esa opcion no esta disponible en el estado actual"""
@@ -25,9 +23,8 @@ class Automata:
                 correct = True
         return correct
 
-
 if __name__ == '__main__':
-    automata = Automata(string='aab')
+    automata = Automata(string='b')
     proof = automata.proof()
     if proof:
         print(f"La cadena: [{automata.string}] esta bien ")
