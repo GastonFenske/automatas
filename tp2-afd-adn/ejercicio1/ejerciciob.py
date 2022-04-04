@@ -2,38 +2,28 @@ from estados import estados
  
 class Automata:
 
-    __alphabet = ['a', 'b', None]
-
     def __init__(self, string: str) -> None:
-        self.__string = string
-
-    @property
-    def string(self):
-        return self.__string
-
-    @string.setter
-    def string(self, data):
-        self.__string = data
+        self.string = string
 
     def proof(self) -> bool:
-        for c in self.string:
-            if c not in self.__alphabet:
-                return False
 
+        correct = False
         index = 0
+        accept_states = [3, 2]
+
         for c in self.string:
             try:
+                if estados[index][c] not in accept_states:
+                    correct = False
                 index = estados[index][c]
             except KeyError:
                 """Aca solo entra si esa opcion no esta disponible en el estado actual"""
-                return False
-            if index == 3:
+                correct = False
+                return correct
+            if index in accept_states:
                 """Aca entra si se llego al estado de aceptacion 3"""
-                return True
-            if self.string.index(c) + 1 == len(self.string):
-                """Aca entra a la ultima letra de la cadena"""
-                c = None
-        return False
+                correct = True
+        return correct
 
 
 if __name__ == '__main__':
