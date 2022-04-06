@@ -1,4 +1,4 @@
-from estados import estados
+from estadosej1b import estados
  
 class Automata:
 
@@ -9,7 +9,7 @@ class Automata:
 
         correct = False
         index = 0
-        accept_states = [1, 2]
+        accept_states = [3, 4, 5, 7, 8, 9]
 
         for c in self.string:
             try:
@@ -24,7 +24,7 @@ class Automata:
         return correct
 
 if __name__ == '__main__':
-    automata = Automata(string='b')
+    automata = Automata(string='ac')
     proof = automata.proof()
     if proof:
         print(f"La cadena: [{automata.string}] esta bien ")
