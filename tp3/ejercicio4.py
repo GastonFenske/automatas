@@ -1,4 +1,4 @@
-from estadosej1b import estados
+from estadosej4 import estados
  
 class Automata:
 
@@ -8,7 +8,7 @@ class Automata:
     def proof(self) -> bool:
         correct = False
         index = 0
-        accept_states = [3, 4, 5, 7, 8, 9]
+        accept_states = [4]
         for c in self.string:
             try:
                 index = estados[index][c]
@@ -19,10 +19,12 @@ class Automata:
             if index in accept_states:
                 """Aca entra si se llego al estado de aceptacion"""
                 correct = True
+            else:
+                correct = False
         return correct
 
 if __name__ == '__main__':
-    automata = Automata(string='bc')
+    automata = Automata(string='babbbabb')
     proof = automata.proof()
     if proof:
         print(f"La cadena: [{automata.string}] esta bien ")
