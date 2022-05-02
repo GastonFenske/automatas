@@ -1,7 +1,7 @@
 import re
 
 NOMBRE_ARCHIVO = 'contras.txt'
-PATRON = '(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}'
+PATRON = '(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}'
 
 class Analizador:
 
