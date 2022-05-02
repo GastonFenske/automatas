@@ -12,6 +12,7 @@ class Automata:
         for c in self.string:
             try:
                 index = estados[index][c]
+                print(index)
             except KeyError:
                 """Aca solo entra si esa opcion no esta disponible en el estado actual"""
                 correct = False
@@ -22,7 +23,7 @@ class Automata:
         return correct
 
 if __name__ == '__main__':
-    automata = Automata(string='bc')
+    automata = Automata(string='aabc')
     proof = automata.proof()
     if proof:
         print(f"La cadena: [{automata.string}] esta bien ")

@@ -15,6 +15,7 @@ class Automata:
         for c in self.string:
             try:
                 index = estados[index][c]
+                print(index)
             except KeyError:
                 """Aca solo entra si esa opcion no esta disponible en el estado actual"""
                 correct = False

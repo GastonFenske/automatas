@@ -24,7 +24,7 @@ class Automata:
         return correct
 
 if __name__ == '__main__':
-    automata = Automata(string='babbbabb')
+    automata = Automata(string='abb')
     proof = automata.proof()
     if proof:
         print(f"La cadena: [{automata.string}] esta bien ")
