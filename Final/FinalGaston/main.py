@@ -1,5 +1,5 @@
 from operator import indexOf
-import re
+import re, datetime
 ARCHIVO =  'UsuariosWifi.txt'
 
 def show_menu(): 
@@ -18,6 +18,7 @@ bajada y subida
 def show_by_user():
     user = input("Ingrese el usuario a buscar: ")
     lines = read_file()
+    time = 0
     for line in lines:
         if re.findall(user, line):
             line = show_line(line)
@@ -26,12 +27,15 @@ def show_by_user():
             # date1, date2 = get_date(line)
             # print(date1, date2)
             # info = create_object(line)
-            trafic = get_trafic_down(line)
-            trafic_up = get_trafic_up(line)
-            print(trafic, 'BAJADA')
-            print(trafic_up, 'SUBIR')
+            # trafic = get_trafic_down(line)
+            # trafic_up = get_trafic_up(line)
+            # print(trafic, 'BAJADA')
+            # print(trafic_up, 'SUBIR')
+            time += get_seconds(line)
+            # print(time)
             # print(info)
             # print(line)
+    print(format_time(time))
 
 def create_object(line):
     id = line[0]
@@ -43,7 +47,7 @@ def create_object(line):
     octetos_out = line[6]
     mac_ap = line[7]
     mac_cliente = line[8]
-    info_user = Registro(id, user, inicio_conexion, fin_conexion, tiempo_sesion, octetos_int, octetos_out, mac_ap, mac_cliente)
+    info_user = Register(id, user, inicio_conexion, fin_conexion, tiempo_sesion, octetos_int, octetos_out, mac_ap, mac_cliente)
     return info_user
 
 def show_macs_by_user(userId):
@@ -63,6 +67,16 @@ def read_file():
 def show_line(line) -> list:
     line = list(re.split(r';', line))
     return line
+
+# def get_time(line):
+#     seconds= get_seconds(line)
+    # time = datetime.timedelta(seconds=int(seconds))
+    # return time
+
+def format_time(seconds):
+    time = datetime.timedelta(seconds=int(seconds))
+    return time
+
 
 def get_all_mac_ap() -> dict:
     lines = read_file()
@@ -99,6 +113,10 @@ def get_date(line):
     dates = re.search('((\d{2}\/)+\d{4}) (\d{2}:\d{2})', line)
     return dates.group(0), dates.group(1)
 
+def get_seconds(line: list) -> int:
+    seconds = line[4]
+    return int(seconds)
+
 def get_trafic_down(line: list):
     down = line[5]
     return down
@@ -107,7 +125,7 @@ def get_trafic_up(line: list):
     up = line[6]
     return up
 
-class Registro:
+class Register:
 
     def __init__(self, id, usuario, inicio_conexion, fin_conexion, tiempo_sesion, octetos_int, octeos_out, mac_ap, mac_cliente) -> None:
         self.id = id
@@ -127,9 +145,9 @@ class Registro:
 def main():
     l = 'f10be9301bcb139a;csegeview;28/08/2019 10:06;28/08/2019 10:06;12;2354;559;04-18-D6-22-94-E7:UM;48-C7-96-EE-75-1C'
     # print(show_menu())
-    # show_by_user()
-    print(len(get_all_mac_ap()))
-    print(order_macs_ap(get_all_mac_ap()))
+    show_by_user()
+    # print(len(get_all_mac_ap()))
+    # print(order_macs_ap(get_all_mac_ap()))
     # show_macs_by_user('csegeview')
     # show_line(abrir_archivo())
 
