@@ -1,3 +1,4 @@
+from operator import indexOf
 import re
 ARCHIVO =  'UsuariosWifi.txt'
 
@@ -25,10 +26,12 @@ def show_by_user():
             # date1, date2 = get_date(line)
             # print(date1, date2)
             # info = create_object(line)
-            trafic = get_trafic(line)
-            # print(trafic)
+            trafic = get_trafic_down(line)
+            trafic_up = get_trafic_up(line)
+            print(trafic, 'BAJADA')
+            print(trafic_up, 'SUBIR')
             # print(info)
-            print(line)
+            # print(line)
 
 def create_object(line):
     id = line[0]
@@ -57,12 +60,31 @@ def read_file():
     archivo.close()
     return lines
 
-def show_line(line):
+def show_line(line) -> list:
     line = list(re.split(r';', line))
     return line
 
+def get_all_mac_ap() -> dict:
+    lines = read_file()
+    lines.pop(0)
+    macs_ap = {}
+    for line in lines:
+        mac_ap = get_mac_ap(line)
+        if mac_ap not in macs_ap:
+            macs_ap[mac_ap] = 1
+        else:
+            macs_ap[mac_ap] += 1
+    return macs_ap
+
+def order_macs_ap(macs_ap: dict) -> dict:
+    macs_ap = {k: v for k, v in sorted(macs_ap.items(), key=lambda item: item[1])}
+    return macs_ap
+
+
 def get_mac_ap(line):
+    # print(line)
     mac_ap = re.search('([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2}):UM', line)
+    # print(mac_ap.group(0))
     return mac_ap.group(0)
 
 def get_mac(line):
@@ -77,11 +99,13 @@ def get_date(line):
     dates = re.search('((\d{2}\/)+\d{4}) (\d{2}:\d{2})', line)
     return dates.group(0), dates.group(1)
 
-def get_trafic(line):
-    down = show_line(line[5])
-    up = show_line(line[6])
-    print(line)
-    return f'Bajada: {down}, Subida: {up}'
+def get_trafic_down(line: list):
+    down = line[5]
+    return down
+
+def get_trafic_up(line: list):
+    up = line[6]
+    return up
 
 class Registro:
 
@@ -103,7 +127,9 @@ class Registro:
 def main():
     l = 'f10be9301bcb139a;csegeview;28/08/2019 10:06;28/08/2019 10:06;12;2354;559;04-18-D6-22-94-E7:UM;48-C7-96-EE-75-1C'
     # print(show_menu())
-    show_by_user()
+    # show_by_user()
+    print(len(get_all_mac_ap()))
+    print(order_macs_ap(get_all_mac_ap()))
     # show_macs_by_user('csegeview')
     # show_line(abrir_archivo())
 
