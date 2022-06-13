@@ -5,12 +5,12 @@ PATRON = '((25[0-5]|000|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\.(?!$)|$)){4}'
 
 class Analizador:
 
-    def leer_archivo(self):
+    def leer_archivo(self) -> list:
         file = open(NOMBRE_ARCHIVO, 'r')
         lines = file.readlines()
         return lines
 
-    def formatear_lineas(self, lineas: list):
+    def formatear_lineas(self, lineas: list) -> list:
         lines = [line[:-1] for line in lineas if line is not lineas[-1]]
         lines.append(lineas[-1])
         return lines

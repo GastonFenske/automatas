@@ -5,12 +5,12 @@ PATRON = '^[a-zA-Z0-9._-]+@[a-zA-Z_-]+\.(gob|com|edu|org|net)+\.*(ar|ca|br|ch|uy
 
 class Analizador:
 
-    def leer_archivo(self):
+    def leer_archivo(self) -> list:
         file = open(NOMBRE_ARCHIVO, 'r')
         lines = file.readlines()
         return lines
 
-    def formatear_lineas(self, lineas: list):
+    def formatear_lineas(self, lineas: list) -> list:
         lines = [line[:-1] for line in lineas if line is not lineas[-1]]
         lines.append(lineas[-1])
         return lines
