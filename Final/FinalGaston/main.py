@@ -61,6 +61,7 @@ def show_macs_by_user(userId):
 def read_file():
     archivo = open(ARCHIVO, 'r')
     lines = archivo.readlines()
+    lines.pop(0)
     archivo.close()
     return lines
 
@@ -77,10 +78,8 @@ def format_time(seconds):
     time = datetime.timedelta(seconds=int(seconds))
     return time
 
-
 def get_all_mac_ap() -> dict:
     lines = read_file()
-    lines.pop(0)
     macs_ap = {}
     for line in lines:
         mac_ap = get_mac_ap(line)
@@ -93,7 +92,6 @@ def get_all_mac_ap() -> dict:
 def order_macs_ap(macs_ap: dict) -> dict:
     macs_ap = {k: v for k, v in sorted(macs_ap.items(), key=lambda item: item[1])}
     return macs_ap
-
 
 def get_mac_ap(line):
     # print(line)
@@ -141,13 +139,11 @@ class Register:
     def __repr__(self):
         return f"ID: {self.id} USUARIO: {self.usuario} INICIO CONEXION: {self.inicio_conexion} FIN CONEXCION:{self.fin_conexion} TIEMPO SESION: {self.tiempo_sesion} OCTETOS INT: {self.octetos_int} OCTETOS OUT: {self.octeos_out} MAC AP: {self.mac_ap} MAC CLIENTE: {self.mac_cliente}"
         
-
 def main():
-    l = 'f10be9301bcb139a;csegeview;28/08/2019 10:06;28/08/2019 10:06;12;2354;559;04-18-D6-22-94-E7:UM;48-C7-96-EE-75-1C'
     # print(show_menu())
-    show_by_user()
+    # show_by_user()
     # print(len(get_all_mac_ap()))
-    # print(order_macs_ap(get_all_mac_ap()))
+    print(order_macs_ap(get_all_mac_ap()))
     # show_macs_by_user('csegeview')
     # show_line(abrir_archivo())
 
