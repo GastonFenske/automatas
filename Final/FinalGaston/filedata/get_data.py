@@ -32,9 +32,9 @@ class GetData:
                 return line
 
     # @staticmethod
-    def get_date(self, line):
+    def get_date(self, line) -> tuple:
         dates = re.search('((\d{2}\/)+\d{4}) (\d{2}:\d{2})', line)
-        return dates.group(0), dates.group(1)
+        return str(dates.group(0)), str(dates.group(1))
 
     # @staticmethod
     def get_seconds(self, line: list) -> int:

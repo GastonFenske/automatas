@@ -1,5 +1,6 @@
 import datetime
 from pkgutil import get_data
+from pyrsistent import s
 from requests import session
 from filedata import GetData
 from utils import FileDescriptor
@@ -87,21 +88,24 @@ class FileService:
         return user_sessions
 
 
-    def get_conection_id_by_date(self, stData, userId) -> list:
+    def get_conection_id_by_date(self, stData: str, userId) -> list:
         lines = self.file_descriptor.read_file()
         user_lines = self.get_data.get_lines_by_user(userId, lines)
+        # print(user_lines[0:3])
         list_conection_id = []
         for line in user_lines:
-            print(line)
-            date = self.get_data.get_date(self.file_descriptor.show_line(line))
-            print(date)
-            if stData == date:
-                try:
-                    print(self.get_data.get_start_date(self.file_descriptor.show_line(line)))
-                    print("agrega inicio de conexion")
-                    list_conection_id.append(date)
-                except:
-                    pass
+            # print(line)
+            # date = self.get_data.get_date(self.file_descriptor.show_line(line))
+            try:
+                date1, date2 = self.get_data.get_date(line)
+                # print(date1, stData)
+                if stData == date1:
+                        # print(self.get_data.get_start_date(self.file_descriptor.show_line(line)))
+                        # print("agrega inicio de conexion")
+                    list_conection_id.append(date1)
+            except:
+                pass
+
         return list_conection_id
 
     # @staticmethod
