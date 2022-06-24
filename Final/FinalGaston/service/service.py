@@ -1,7 +1,4 @@
 import datetime
-from pkgutil import get_data
-from pyrsistent import s
-from requests import session
 from filedata import GetData
 from utils import FileDescriptor
 from model import Register
@@ -35,8 +32,7 @@ class FileService:
 
     def get_macs_by_user(self, userId) -> set:
         macs: list = []
-        lines = self.file_descriptor.read_file()
-        lines = self.get_data.get_lines_by_user(userId, lines)
+        lines = self.get_data.get_lines_by_user(userId)
         for line in lines:
             mac = self.get_data.get_mac(line)
             macs.append(mac)
@@ -66,8 +62,7 @@ class FileService:
         return f"Tiempo de conexion de la sesion con id {conection_id} -> {time}"
 
     def get_trafic_by_user(self, userId) -> dict:
-        lines = self.file_descriptor.read_file()
-        lines = self.get_data.get_lines_by_user(userId, lines)
+        lines = self.get_data.get_lines_by_user(userId)
         trafic_down = 0
         trafic_up = 0
         for line in lines:
@@ -76,8 +71,7 @@ class FileService:
         return {"trafic down MB" : trafic_down/1000000, "trafic up MB": trafic_up/1000000}
 
     def get_all_user_sessions(self, userId) -> list:
-        lines = self.file_descriptor.read_file()
-        user_lines = self.get_data.get_lines_by_user(userId, lines)
+        user_lines = self.get_data.get_lines_by_user(userId)
         user_sessions = []
         for line in user_lines:
             try: 
@@ -87,34 +81,33 @@ class FileService:
                 pass
         return user_sessions
 
-
-    def get_conection_id_by_date(self, stData: str, userId) -> list:
-        lines = self.file_descriptor.read_file()
-        user_lines = self.get_data.get_lines_by_user(userId, lines)
-        # print(user_lines[0:3])
+    def get_conection_id_by_date(self, stDate: str, endDate: str, userId: str) -> list:
+        user_lines = self.get_data.get_lines_by_user(userId)
         list_conection_id = []
+        allow = False
         for line in user_lines:
-            # print(line)
-            # date = self.get_data.get_date(self.file_descriptor.show_line(line))
-            try:
-                date1, date2 = self.get_data.get_date(line)
-                # print(date1, stData)
-                if stData == date1:
-                        # print(self.get_data.get_start_date(self.file_descriptor.show_line(line)))
-                        # print("agrega inicio de conexion")
-                    list_conection_id.append(date1)
-            except:
-                pass
-
+            date1, date2 = self.get_data.get_date(line)
+            if stDate == date1:
+                allow = True
+            if allow:
+                register = Register.create_object(line=self.file_descriptor.show_line(line))
+                list_conection_id.append(register.id)
+            if endDate == date1:
+                return list_conection_id
         return list_conection_id
 
-    # @staticmethod
-    # def print_hola() -> list:
 
-    #     nombre = str(input("Ingrese el nombre: "))
-    #     lines = []
-    #     userId = "f10be9301bcb139a"
-    #     lines.append(nombre)
-    #     # lines = FileDescriptor.read_file()
-    #     # lines = GetData.get_lines_by_user(userId, lines)
-    #     return lines
+    def get_users_in_a_mac_ap_by_date(self, mac_ap: str, stDate: str, endDate: str) -> list:
+        mac_ap_lines = self.get_data.get_lines_by_mac_ap(mac_ap)
+        users = []
+        allow = False
+        for line in mac_ap_lines:
+            date1, date2 = self.get_data.get_date(line)
+            if stDate == date1:
+                allow = True
+            if allow:
+                register = Register.create_object(line=self.file_descriptor.show_line(line))
+                users.append(register.user)
+            if endDate == date1:
+                return users
+        return users

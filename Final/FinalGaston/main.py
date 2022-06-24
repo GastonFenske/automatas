@@ -30,7 +30,9 @@ def read_option():
     elif opt == 7:
         return file_service.get_trafic_by_user(input("Ingrese el usuario: "))
     elif opt == 2:
-        return file_service.get_conection_id_by_date("28/08/2019 10:07", "csegeview")
+        return file_service.get_conection_id_by_date(stDate="28/08/2019 10:06", endDate="28/08/2019 10:14", userId="csegeview")
+    elif opt == 6:
+        return file_service.get_users_in_a_mac_ap_by_date(stDate="28/08/2019 10:06", endDate="28/08/2019 10:14", mac_ap="04-18-D6-22-94-E7:UM")
 
 def main():
     show_menu()
