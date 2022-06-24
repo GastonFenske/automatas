@@ -5,7 +5,7 @@ class FileDescriptor:
 
     # @staticmethod
     def read_file(self):
-        archivo = open(ARCHIVO, 'r')
+        archivo = open(FILE, 'r')
         lines = archivo.readlines()
         lines.pop(0)
         archivo.close()

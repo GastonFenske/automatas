@@ -1,4 +1,5 @@
 import datetime
+from pkgutil import get_data
 from requests import session
 from filedata import GetData
 from utils import FileDescriptor
@@ -9,7 +10,7 @@ import re, json
 class FileService:
 
     get_data: GetData = GetData()
-    file_descriptor = FileDescriptor()
+    file_descriptor: FileDescriptor = FileDescriptor()
 
     # @staticmethod
     # def show_time_by_user():
@@ -31,7 +32,6 @@ class FileService:
     #             register = Register.create_object(line)
     #             print((register.mac_cliente[1:1]))
 
-    # @staticmethod
     def get_macs_by_user(self, userId) -> set:
         macs: list = []
         lines = self.file_descriptor.read_file()
@@ -41,8 +41,6 @@ class FileService:
             macs.append(mac)
         return set(macs)
 
-
-    # @staticmethod
     def get_all_mac_ap(self) -> dict:
         lines = self.file_descriptor.read_file()
         macs_ap = {}
@@ -54,12 +52,10 @@ class FileService:
                 macs_ap[mac_ap] += 1
         return macs_ap
 
-    # @staticmethod
     def order_macs_ap(self) -> dict:
         macs_ap = {k: v for k, v in sorted(self.get_all_mac_ap().items(), key=lambda item: item[1])}
         return macs_ap
 
-    # @staticmethod
     def sesion_time(self, conection_id):
         lines = self.file_descriptor.read_file()
         line = self.get_data.get_line_by_conection_id(conection_id, lines)
@@ -68,7 +64,6 @@ class FileService:
         time = datetime.timedelta(seconds=seconds)
         return f"Tiempo de conexion de la sesion con id {conection_id} -> {time}"
 
-    # @staticmethod
     def get_trafic_by_user(self, userId) -> dict:
         lines = self.file_descriptor.read_file()
         lines = self.get_data.get_lines_by_user(userId, lines)
@@ -79,7 +74,6 @@ class FileService:
             trafic_up += self.get_data.get_trafic_up(self.file_descriptor.show_line(line))
         return {"trafic down MB" : trafic_down/1000000, "trafic up MB": trafic_up/1000000}
 
-    # @staticmethod
     def get_all_user_sessions(self, userId) -> list:
         lines = self.file_descriptor.read_file()
         user_lines = self.get_data.get_lines_by_user(userId, lines)
@@ -92,6 +86,23 @@ class FileService:
                 pass
         return user_sessions
 
+
+    def get_conection_id_by_date(self, stData, userId) -> list:
+        lines = self.file_descriptor.read_file()
+        user_lines = self.get_data.get_lines_by_user(userId, lines)
+        list_conection_id = []
+        for line in user_lines:
+            print(line)
+            date = self.get_data.get_date(self.file_descriptor.show_line(line))
+            print(date)
+            if stData == date:
+                try:
+                    print(self.get_data.get_start_date(self.file_descriptor.show_line(line)))
+                    print("agrega inicio de conexion")
+                    list_conection_id.append(date)
+                except:
+                    pass
+        return list_conection_id
 
     # @staticmethod
     # def print_hola() -> list:

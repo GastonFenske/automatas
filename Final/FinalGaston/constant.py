@@ -9,5 +9,5 @@ MAIN = """
 bajada y subida
 [8]Listar los AP ordenados por tráfico total
 """
-ARCHIVO =  'UsuariosWifi.txt'
+FILE =  'UsuariosWifi.txt'
 SAFE_FILE = 'UsuariosWifi_safe.xslx'

@@ -1,4 +1,3 @@
-from jinja2 import FileSystemBytecodeCache
 from constant import *
 from service import FileService
 
@@ -30,6 +29,8 @@ def read_option():
         return file_service.get_all_user_sessions(input("Ingrese el usuario: "))
     elif opt == 7:
         return file_service.get_trafic_by_user(input("Ingrese el usuario: "))
+    elif opt == 2:
+        return file_service.get_conection_id_by_date("28/8/2019  10:06:00", "csegeview")
 
 def main():
     show_menu()

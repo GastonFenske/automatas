@@ -1,30 +1,30 @@
 
 class Register:
 
-    def __init__(self, id, usuario, inicio_conexion, fin_conexion, tiempo_sesion, octetos_int, octeos_out, mac_ap, mac_cliente) -> None:
+    def __init__(self, id, user, start_conection, end_conection, session_time, octetcs_in, octets_out, mac_ap, mac_client) -> None:
         self.id = id
-        self.usuario = usuario
-        self.inicio_conexion = inicio_conexion
-        self.fin_conexion = fin_conexion
-        self.tiempo_sesion = tiempo_sesion
-        self.octetos_int = octetos_int
-        self.octeos_out = octeos_out
+        self.user = user
+        self.start_conection = start_conection
+        self.end_conection = end_conection
+        self.session_time = session_time
+        self.octects_in = octetcs_in
+        self.octetcs_out = octets_out
         self.mac_ap = mac_ap
-        self.mac_cliente = mac_cliente
+        self.mac_client = mac_client
     
     def __repr__(self):
-            return f"ID: {self.id} USUARIO: {self.usuario} INICIO CONEXION: {self.inicio_conexion} FIN CONEXCION:{self.fin_conexion} TIEMPO SESION: {self.tiempo_sesion} OCTETOS INT: {self.octetos_int} OCTETOS OUT: {self.octeos_out} MAC AP: {self.mac_ap} MAC CLIENTE: {self.mac_cliente}"
+            return f"ID: {self.id} USUARIO: {self.user} INICIO CONEXION: {self.start_conection} FIN CONEXCION:{self.end_conection} TIEMPO SESION: {self.session_time} OCTETOS INT: {self.octects_in} OCTETOS OUT: {self.octetcs_out} MAC AP: {self.mac_ap} MAC CLIENTE: {self.mac_client}"
 
     @staticmethod
     def create_object(line):
         id = line[0]
         user = line[1]
-        inicio_conexion = line[2]
-        fin_conexion = line[3]
-        tiempo_sesion = line[4]
-        octetos_int = line[5]
-        octetos_out = line[6]
+        start_conection = line[2]
+        end_conection = line[3]
+        session_time = line[4]
+        octets_in = line[5]
+        octets_out = line[6]
         mac_ap = line[7]
-        mac_cliente = line[8]
-        info_user = Register(id, user, inicio_conexion, fin_conexion, tiempo_sesion, octetos_int, octetos_out, mac_ap, mac_cliente)
+        mac_client = line[8]
+        info_user = Register(id, user, start_conection, end_conection, session_time, octets_in, octets_out, mac_ap, mac_client)
         return info_user

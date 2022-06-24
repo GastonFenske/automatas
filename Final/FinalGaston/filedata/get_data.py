@@ -52,4 +52,10 @@ class GetData:
         return int(up)
 
     # @staticmethod
-    # get_da
+    def get_start_date(self, line: list) -> str:
+        start_date = line[2]
+        return str(start_date)
+
+    def get_end_date(self, line: list) -> str:
+        end_date = line[3]
+        return str(end_date)
