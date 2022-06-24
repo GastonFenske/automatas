@@ -38,7 +38,6 @@ class GetData:
             if re.findall(conection_id, line):
                 return line
 
-    # @staticmethod
     def get_date(self, line) -> tuple:
         dates = re.search('((\d{2}\/)+\d{4}) (\d{2}:\d{2})', line)
         # return str(dates.group(0)), str(dates.group(1))

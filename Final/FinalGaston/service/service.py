@@ -1,36 +1,16 @@
 import datetime
 from filedata import GetData
-from utils import FileDescriptor
+from utils import FileDescriptor, Utils
 from model import Register
 import re, json
-
 
 class FileService:
 
     get_data: GetData = GetData()
     file_descriptor: FileDescriptor = FileDescriptor()
 
-    # @staticmethod
-    # def show_time_by_user():
-    #     user = input("Ingrese el usuario a buscar: ")
-    #     lines = read_file()
-    #     time = 0
-    #     for line in lines:
-    #         if re.findall(user, line):
-    #             line = show_line(line)
-    #             time += get_seconds(line)
-    #     print(format_time(time))
-
-    # @staticmethod
-    # def show_macs_by_user(userId):
-    #     lines = FileDescriptor.read_file()
-    #     for line in lines:
-    #         if re.findall(userId, line):
-    #             line = FileDescriptor.show_line(line)
-    #             register = Register.create_object(line)
-    #             print((register.mac_cliente[1:1]))
-
-    def get_macs_by_user(self, userId) -> set:
+    def get_macs_by_user(self, userId=None) -> set:
+        userId = str(input("Ingrese el usuario: "))
         macs: list = []
         lines = self.get_data.get_lines_by_user(userId)
         for line in lines:
@@ -53,7 +33,8 @@ class FileService:
         macs_ap = {k: v for k, v in sorted(self.get_all_mac_ap().items(), key=lambda item: item[1])}
         return macs_ap
 
-    def sesion_time(self, conection_id):
+    def sesion_time(self, conection_id=None):
+        conection_id = str(input("Ingrese el conection_id: "))
         lines = self.file_descriptor.read_file()
         line = self.get_data.get_line_by_conection_id(conection_id, lines)
         line = self.file_descriptor.show_line(line)
@@ -61,7 +42,8 @@ class FileService:
         time = datetime.timedelta(seconds=seconds)
         return f"Tiempo de conexion de la sesion con id {conection_id} -> {time}"
 
-    def get_trafic_by_user(self, userId) -> dict:
+    def get_trafic_by_user(self, userId=None) -> dict:
+        userId = input("Ingrese el usuario: ")
         lines = self.get_data.get_lines_by_user(userId)
         trafic_down = 0
         trafic_up = 0
@@ -70,7 +52,8 @@ class FileService:
             trafic_up += self.get_data.get_trafic_up(self.file_descriptor.show_line(line))
         return {"trafic down MB" : trafic_down/1000000, "trafic up MB": trafic_up/1000000}
 
-    def get_all_user_sessions(self, userId) -> list:
+    def get_all_user_sessions(self, userId=None) -> list:
+        userId = str(input("Ingrese usuario: "))
         user_lines = self.get_data.get_lines_by_user(userId)
         user_sessions = []
         for line in user_lines:
@@ -81,33 +64,35 @@ class FileService:
                 pass
         return user_sessions
 
-    def get_conection_id_by_date(self, stDate: str, endDate: str, userId: str) -> list:
-        user_lines = self.get_data.get_lines_by_user(userId)
-        list_conection_id = []
+    def get_by_date_range(self, type_get: str, option_in: str, option_out: str) -> list:
+        strategies = {
+            "mac": self.get_data.get_lines_by_mac_ap,
+            "user": self.get_data.get_lines_by_user
+        }
+        data = Utils.input_function("fecha inicio", "fecha fin")
+        print(data)
+        lines = strategies[type_get](option_in)
+        results = []
         allow = False
-        for line in user_lines:
-            date1, date2 = self.get_data.get_date(line)
-            if stDate == date1:
+        for line in lines:
+            date = self.get_data.get_date(line)
+            if data["fecha inicio"] == date[0]:
                 allow = True
             if allow:
                 register = Register.create_object(line=self.file_descriptor.show_line(line))
-                list_conection_id.append(register.id)
-            if endDate == date1:
-                return list_conection_id
-        return list_conection_id
+                options_out = {
+                    "user": register.user,
+                    "id": register.id
+                }
+                results.append(options_out[option_out])
+            if data["fecha fin"] == date[0]:
+                return results
+        return results
+
+    def fun1(self):
+        return self.get_by_date_range("user", "csegeview", "id")
+
+    def fun2(self):
+        return self.get_by_date_range("mac", "04-18-D6-22-94-E7:UM", "user")
 
 
-    def get_users_in_a_mac_ap_by_date(self, mac_ap: str, stDate: str, endDate: str) -> list:
-        mac_ap_lines = self.get_data.get_lines_by_mac_ap(mac_ap)
-        users = []
-        allow = False
-        for line in mac_ap_lines:
-            date1, date2 = self.get_data.get_date(line)
-            if stDate == date1:
-                allow = True
-            if allow:
-                register = Register.create_object(line=self.file_descriptor.show_line(line))
-                users.append(register.user)
-            if endDate == date1:
-                return users
-        return users
