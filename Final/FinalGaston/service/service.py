@@ -2,7 +2,6 @@ import datetime
 from filedata import GetData
 from utils import FileDescriptor, Utils
 from model import Register
-import re, json
 
 class FileService:
 
@@ -89,10 +88,10 @@ class FileService:
                 return results
         return results
 
-    def fun1(self):
+    def get_sessions_by_user_and_date(self):
         return self.get_by_date_range("user", "csegeview", "id")
 
-    def fun2(self):
+    def get_users_by_macap_and_date(self):
         return self.get_by_date_range("mac", "04-18-D6-22-94-E7:UM", "user")
 
 

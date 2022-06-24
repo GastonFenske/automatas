@@ -10,4 +10,6 @@ bajada y subida
 [0]Para salir
 """
 FILE =  'UsuariosWifi.txt'
-SAFE_FILE = 'UsuariosWifi_safe.xslx'
+# SAFE_FILE = 'UsuariosWifi_safe.xslx'
+START_DATE = "28/08/2019 10:06"
+END_DATE = "28/08/2019 10:14"

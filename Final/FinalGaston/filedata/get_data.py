@@ -40,7 +40,6 @@ class GetData:
 
     def get_date(self, line) -> tuple:
         dates = re.search('((\d{2}\/)+\d{4}) (\d{2}:\d{2})', line)
-        # return str(dates.group(0)), str(dates.group(1))
         try:
             return str(dates.group(0)), str(dates.group(1))
         except:

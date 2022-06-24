@@ -10,8 +10,8 @@ def read_option():
     opt = input("Ingrese una opción >>>: ")
     options = {
         1: file_service.get_all_user_sessions,
-        2: file_service.fun1,
-        6: file_service.fun2,
+        2: file_service.get_sessions_by_user_and_date,
+        6: file_service.get_users_by_macap_and_date,
         3: file_service.sesion_time,
         5: file_service.get_macs_by_user,
         7: file_service.get_trafic_by_user,
@@ -23,8 +23,6 @@ def read_option():
         return sys.exit()
 
 def main():
-    #28/08/2019 10:06
-    #28/08/2019 10:14
     while True:
         show_menu()
         print(read_option())
