@@ -1,1 +1,1 @@
-from .getData import GetData
+from .get_data import GetData

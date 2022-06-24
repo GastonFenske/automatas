@@ -1,7 +1,6 @@
+from jinja2 import FileSystemBytecodeCache
 from constant import *
 from service import FileService
-
-
 
 def show_menu() -> str: 
     print(MAIN)
@@ -19,17 +18,18 @@ def show_menu() -> str:
 #     return options[opt]
 
 def read_option():
+    file_service: FileService = FileService()
     opt = int(input("Ingrese una opción: "))
     if opt == 8:
-        return FileService.get_all_mac_ap()
+        return file_service.order_macs_ap()
     elif opt == 5:
-        return FileService.get_macs_by_user(input("Ingrese el usuario: "))
+        return file_service.get_macs_by_user(input("Ingrese el usuario: "))
     elif opt == 3:
-        return FileService.sesion_time(input("Ingrese el conection_id: "))
+        return file_service.sesion_time(input("Ingrese el conection_id: "))
     elif opt == 1:
-        return FileService.get_all_user_sessions(input("Ingrese el usuario: "))
+        return file_service.get_all_user_sessions(input("Ingrese el usuario: "))
     elif opt == 7:
-        return FileService.get_trafic_by_user(input("Ingrese el usuario: "))
+        return file_service.get_trafic_by_user(input("Ingrese el usuario: "))
 
 def main():
     show_menu()
