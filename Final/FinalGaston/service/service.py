@@ -1,5 +1,6 @@
 from curses import reset_shell_mode
 import datetime
+from unittest import result
 from filedata import GetData
 from utils import FileDescriptor, Utils
 from model import Register
@@ -108,7 +109,7 @@ class FileService:
                 #     "id": register.id
                 # }
                 # results.append(options_out[option_out])
-                results.apend(register)
+                results.append(register)
             if data["fecha fin"] == date[0]:
                 return  results
         return results
@@ -123,10 +124,10 @@ class FileService:
 
     def get_sessions_by_user_and_date(self):
         objects = self.get_by_date(self.strategies("user"), "csegeview")
-        return [o.user for o in object]
+        return [o.user for o in objects]
 
     def get_users_by_macap_and_date(self):
         object = self.get_by_date(self.strategies("mac"), "04-18-D6-22-94-E7:UM")
-        return [o.id for o in object]
+        return [o.id for o in objects]
 
 
