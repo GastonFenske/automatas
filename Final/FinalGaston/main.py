@@ -7,7 +7,7 @@ def show_menu() -> str:
 
 def read_option():
     file_service: FileService = FileService()
-    opt = input("Ingrese una opción >>>: ")
+    opt = int(input("Ingrese una opción >>>: "))
     options = {
         1: file_service.get_all_user_sessions,
         2: file_service.get_sessions_by_user_and_date,

@@ -1,3 +1,4 @@
+from curses import reset_shell_mode
 import datetime
 from filedata import GetData
 from utils import FileDescriptor, Utils
@@ -69,7 +70,6 @@ class FileService:
             "user": self.get_data.get_lines_by_user
         }
         data = Utils.input_function("fecha inicio", "fecha fin")
-        print(data)
         lines = strategies[type_get](option_in)
         results = []
         allow = False
@@ -88,10 +88,45 @@ class FileService:
                 return results
         return results
 
+    def get_by_date(self, type_get, option_in: str, option_out = None) -> list:
+        # strategies = {
+        #     "mac": self.get_data.get_lines_by_mac_ap,
+        #     "user": self.get_data.get_lines_by_user
+        # }
+        data = Utils.input_function("fecha inicio", "fecha fin")
+        lines = type_get(option_in)
+        results = []
+        allow = False
+        for line in lines:
+            date = self.get_data.get_date(line)
+            if data["fecha inicio"] == date[0]:
+                allow = True
+            if allow:
+                register = Register.create_object(line=self.file_descriptor.show_line(line))
+                # options_out = {
+                #     "user": register.user,
+                #     "id": register.id
+                # }
+                # results.append(options_out[option_out])
+                results.apend(register)
+            if data["fecha fin"] == date[0]:
+                return  results
+        return results
+
+    def strategies(self, strategie):
+        strategies = {
+            "mac": self.get_data.get_lines_by_mac_ap,
+            "user": self.get_data.get_lines_by_user
+        }
+        return  strategies[strategie]
+
+
     def get_sessions_by_user_and_date(self):
-        return self.get_by_date_range("user", "csegeview", "id")
+        objects = self.get_by_date(self.strategies("user"), "csegeview")
+        return [o.user for o in object]
 
     def get_users_by_macap_and_date(self):
-        return self.get_by_date_range("mac", "04-18-D6-22-94-E7:UM", "user")
+        object = self.get_by_date(self.strategies("mac"), "04-18-D6-22-94-E7:UM")
+        return [o.id for o in object]
 
 
