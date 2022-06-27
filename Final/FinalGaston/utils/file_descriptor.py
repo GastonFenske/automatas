@@ -3,7 +3,7 @@ import re
 
 class FileDescriptor:
 
-    def read_file(self):
+    def read_file(self) -> list[str]:
         archivo = open(FILE, 'r')
         lines = archivo.readlines()
         lines.pop(0)

@@ -1,7 +1,7 @@
 import re
 from utils import FileDescriptor
 
-class GetData:
+class DataFilter:
 
     file_descriptor: FileDescriptor = FileDescriptor()
 

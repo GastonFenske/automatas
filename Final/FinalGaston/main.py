@@ -2,6 +2,10 @@ from constant import *
 from service import FileService
 import sys
 
+from colorama import init, Fore
+
+init(autoreset=True)
+
 def show_menu() -> str: 
     print(MAIN)
 
@@ -22,10 +26,10 @@ def read_option():
     except:
         return sys.exit()
 
-def main():
+def main() -> None:
     while True:
         show_menu()
-        print(read_option())
+        print(f'\n{Fore.BLUE}{read_option()}')
 
 if __name__ == '__main__':
     main()

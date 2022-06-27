@@ -1,19 +1,17 @@
-from curses import reset_shell_mode
 import datetime
-from unittest import result
-from filedata import GetData
+from filedata import DataFilter
 from utils import FileDescriptor, Utils
 from model import Register
 
 class FileService:
 
-    get_data: GetData = GetData()
+    get_data: DataFilter = DataFilter()
     file_descriptor: FileDescriptor = FileDescriptor()
 
-    def get_macs_by_user(self, userId=None) -> set:
-        userId = str(input("Ingrese el usuario: "))
+    def get_macs_by_user(self, user_id=None) -> set:
+        user_id = str(input("Ingrese el usuario: "))
         macs: list = []
-        lines = self.get_data.get_lines_by_user(userId)
+        lines = self.get_data.get_lines_by_user(user_id)
         for line in lines:
             mac = self.get_data.get_mac(line)
             macs.append(mac)
@@ -43,9 +41,9 @@ class FileService:
         time = datetime.timedelta(seconds=seconds)
         return f"Tiempo de conexion de la sesion con id {conection_id} -> {time}"
 
-    def get_trafic_by_user(self, userId=None) -> dict:
-        userId = input("Ingrese el usuario: ")
-        lines = self.get_data.get_lines_by_user(userId)
+    def get_trafic_by_user(self, user_id=None) -> dict:
+        user_id = input("Ingrese el usuario: ")
+        lines = self.get_data.get_lines_by_user(user_id)
         trafic_down = 0
         trafic_up = 0
         for line in lines:
@@ -53,9 +51,9 @@ class FileService:
             trafic_up += self.get_data.get_trafic_up(self.file_descriptor.show_line(line))
         return {"trafic down MB" : trafic_down/1000000, "trafic up MB": trafic_up/1000000}
 
-    def get_all_user_sessions(self, userId=None) -> list:
-        userId = str(input("Ingrese usuario: "))
-        user_lines = self.get_data.get_lines_by_user(userId)
+    def get_all_user_sessions(self, user_id=None) -> list:
+        user_id = str(input("Ingrese usuario: "))
+        user_lines = self.get_data.get_lines_by_user(user_id)
         user_sessions = []
         for line in user_lines:
             try: 
@@ -65,69 +63,35 @@ class FileService:
                 pass
         return user_sessions
 
-    def get_by_date_range(self, type_get: str, option_in: str, option_out: str) -> list:
-        strategies = {
-            "mac": self.get_data.get_lines_by_mac_ap,
-            "user": self.get_data.get_lines_by_user
-        }
-        data = Utils.input_function("fecha inicio", "fecha fin")
-        lines = strategies[type_get](option_in)
+    def get_by_date_range(self, type_get) -> list:
+        data_input = Utils.input_function("fecha inicio", "fecha fin", "parametro")
+        lines = type_get(data_input["parametro"])
         results = []
-        allow = False
         for line in lines:
             date = self.get_data.get_date(line)
-            if data["fecha inicio"] == date[0]:
-                allow = True
-            if allow:
+            date = datetime.datetime.strptime(date[0], "%d/%m/%Y %H:%M")
+            start_date = datetime.datetime.strptime(data_input["fecha inicio"], "%d/%m/%Y %H:%M")
+            end_date = datetime.datetime.strptime(data_input["fecha fin"], "%d/%m/%Y %H:%M")
+            if start_date <= date <= end_date:
                 register = Register.create_object(line=self.file_descriptor.show_line(line))
-                options_out = {
-                    "user": register.user,
-                    "id": register.id
-                }
-                results.append(options_out[option_out])
-            if data["fecha fin"] == date[0]:
-                return results
-        return results
-
-    def get_by_date(self, type_get, option_in: str, option_out = None) -> list:
-        # strategies = {
-        #     "mac": self.get_data.get_lines_by_mac_ap,
-        #     "user": self.get_data.get_lines_by_user
-        # }
-        data = Utils.input_function("fecha inicio", "fecha fin")
-        lines = type_get(option_in)
-        results = []
-        allow = False
-        for line in lines:
-            date = self.get_data.get_date(line)
-            if data["fecha inicio"] == date[0]:
-                allow = True
-            if allow:
-                register = Register.create_object(line=self.file_descriptor.show_line(line))
-                # options_out = {
-                #     "user": register.user,
-                #     "id": register.id
-                # }
-                # results.append(options_out[option_out])
                 results.append(register)
-            if data["fecha fin"] == date[0]:
-                return  results
+            if end_date == date:
+                break
         return results
 
-    def strategies(self, strategie):
+    def strategies(self, strategy):
         strategies = {
             "mac": self.get_data.get_lines_by_mac_ap,
             "user": self.get_data.get_lines_by_user
         }
-        return  strategies[strategie]
+        return  strategies[strategy]
 
-
-    def get_sessions_by_user_and_date(self):
-        objects = self.get_by_date(self.strategies("user"), "csegeview")
-        return [o.user for o in objects]
-
-    def get_users_by_macap_and_date(self):
-        object = self.get_by_date(self.strategies("mac"), "04-18-D6-22-94-E7:UM")
+    def get_sessions_by_user_and_date(self) -> list:
+        objects = self.get_by_date_range(self.strategies("user"))
         return [o.id for o in objects]
+
+    def get_users_by_macap_and_date(self) -> list:
+        objects = self.get_by_date_range(self.strategies("mac"))
+        return [o.user for o in objects]
 
 

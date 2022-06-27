@@ -10,6 +10,7 @@ bajada y subida
 [0]Para salir
 """
 FILE =  'UsuariosWifi.txt'
-# SAFE_FILE = 'UsuariosWifi_safe.xslx'
-START_DATE = "28/08/2019 10:06"
-END_DATE = "28/08/2019 10:14"
+# START_DATE = "28/08/2019 10:06"
+# END_DATE = "28/08/2019 10:14"
+# USER = "csegeview"
+# MACAP = "04-18-D6-22-94-E7:UM"
