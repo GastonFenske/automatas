@@ -32,14 +32,14 @@ class FileService:
         macs_ap = {k: v for k, v in sorted(self.get_all_mac_ap().items(), key=lambda item: item[1])}
         return macs_ap
 
-    def sesion_time(self, conection_id=None):
-        conection_id = str(input("Ingrese el conection_id: "))
-        lines = self.file_descriptor.read_file()
-        line = self.get_data.get_line_by_conection_id(conection_id, lines)
-        line = self.file_descriptor.show_line(line)
-        seconds = self.get_data.get_seconds(line)
-        time = datetime.timedelta(seconds=seconds)
-        return f"Tiempo de conexion de la sesion con id {conection_id} -> {time}"
+    def sesion_time(self):
+        user_id = str(input("Ingrese el user: "))
+        lines = self.get_data.get_lines_by_user(user_id)
+        time = 0
+        for line in lines:
+            time += self.get_data.get_seconds(self.file_descriptor.show_line(line))
+        time = datetime.timedelta(seconds=time)
+        return time
 
     def get_trafic_by_user(self, user_id=None) -> dict:
         user_id = input("Ingrese el usuario: ")
