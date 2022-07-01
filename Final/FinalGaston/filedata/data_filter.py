@@ -7,15 +7,24 @@ class DataFilter:
 
     def get_mac_ap(self, line):
         mac_ap = re.search('([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2}):UM', line)
-        return mac_ap.group(0)
+        try:
+            return mac_ap.group(0)
+        except:
+            return None
 
     def get_mac(self, line):
         mac = re.search('([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})', line)
-        return mac.group(0)
+        try:
+            return mac.group(0)
+        except:
+            return None
         
     def get_conection_id(self, line):
         user_id = re.search('([\w\d]){16}', line)
-        return user_id.group(0)
+        try:
+            return user_id.group(0)
+        except:
+            return None
 
     def get_lines_by_user(self, user_id) -> list:
         lines = self.file_descriptor.read_file()
